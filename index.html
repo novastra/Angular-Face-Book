@@ -1,0 +1,77 @@
+<!doctype html>
+<html ng-app id="ng-app" data-ng-app="ng-app">
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+ <meta charset=iso-8859-1>
+ <meta name="author" content="Novastra">
+ <meta name="description" content="Face Book, directory, list, photo wall, Trombinoscope, angular"> 
+ <meta http-equiv="Content-Language" content="fr" />
+ <title>Face book</title>
+ <link href="css/font-awesome.min.css" rel="stylesheet">
+ <link href="css/style.css" rel="stylesheet"> 
+</head>
+
+<body onKeydown="shFirst(event);" ng-controller="Main">
+
+<header id="heados">
+ <h1><div class="logo"></div></h1>
+ <input type="search" ng-model="filtrePhoto" class="filter" placeholder="Search.." autofocus="true">
+ <a class="clearos" href="" ng-click="filtrePhoto = null"><i class="fa fa-times"></i></a>
+ <a class="falsosRech"><i class="fa fa-search"></i></a>
+<label for="filtProj" id="filtProjL"><i class="fa fa-cubes"></i> Project</label>
+<select id="filtProj" ng-model="filtProj" ng-options="dd as dd.projet for dd in personnes | unique:'projet'">
+<option value="">ALL</option>
+</select>
+<input type="checkbox" id="filtDispo" class="SPcheckbox" ng-model="filterFlag.dispo" ng-true-value="" ng-false-value="!null"/>
+<label for="filtDispo" id="filtDispoL" class="SPlabel">Available</label>
+<input type="checkbox" id="filtRef" class="SPcheckbox" ng-model="filterFlag.ref" ng-true-value="" ng-false-value="!null"/>
+<label for="filtRef" id="filtRefL" class="SPlabel">Specialist</label>
+
+</header>
+<div class="grid" ng-controller="Main">
+<div ng-repeat="persParBureau in persBurFiltre() | filter:filterbureau | orderBy:['-niveau','bureau']"> <!-- group by bureau, filter by bureau name, orderBy to be able to put the direction in first place if needed-->
+
+<div class="contBureau tout">
+<h2> {{persParBureau.bureau}} </h2>
+<div id="node{{i.id}}" class="box" ng-repeat="i in personnes  | filter:{bureau: persParBureau.bureau,projet: filtProj.projet} | filter:filtrePhoto | filter:filterFlag | orderBy:['nom']"> <!--use orderBy:[niveau, nom] to have a 2 levels ordered list-->
+<img ng-src="{{i.image}}" ng-click="afficheFiche(i)">
+<div class="legende">     
+<p>{{ i.nom }} {{ i.prenom }}</p><br>
+<p>{{ i.grade }}</p><br>
+</div></div></div></div>
+   
+<div id="overlay" class="overlay" onClick=""></div>
+<div id="fichePerso" class="modalos">
+<img id="fichePhoto" src=""/>
+<h3 id="fichePNom"></h3>
+<a id="clMod" class="clMod" onClick=""><i class="fa fa-times"></i></a>
+<div class="modGauche">
+<ul>
+<li><i class="fa fa-phone"></i><p id="ficheTel"></p></li>
+<li><i class="fa fa-at"></i><a id="ficheContact" href="">Mail</a></li>
+<li><i class="fa fa-building"></i><p id="fichePiece"></p></li>
+<li id="ficheRef"></li>
+<li id="ficheDispo"></li>
+</ul>
+</div>
+<div class="modDroite">
+<ul>
+<a id="ficheExport" class="indicat exportFiche" onClick=""><i class="fa fa-user-plus"></i><span>Add to my contacts</span></a>
+<li id="ficheGrade"></li>
+<li id="ficheBureau"></li>
+<li id="ficheProjet" class="indicat detail projet"></li>	
+<li id="ficheComp" class="indicat detail"></li>
+<li id="ficheExp" class="indicat detail"></li>
+</ul>	
+</div>
+</div>
+	  
+<a id="retour" href="" onclick="hdp()"><i class="fa fa-chevron-up"></i></a><!--Back to top of page-->
+</div>
+
+<script src="js/angular.min.js"></script>
+<script src="js/data.js"></script> 
+<script src="js/main.js"></script> 
+</body>
+</html>
